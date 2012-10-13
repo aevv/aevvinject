@@ -32,10 +32,6 @@
             this.bInject = new System.Windows.Forms.Button();
             this.bUnject = new System.Windows.Forms.Button();
             this.gbSelect = new System.Windows.Forms.GroupBox();
-            this.lbProcesses = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.bRefresh = new System.Windows.Forms.Button();
             this.bSelectExe = new System.Windows.Forms.Button();
             this.bSelectPID = new System.Windows.Forms.Button();
             this.bBrowseExe = new System.Windows.Forms.Button();
@@ -43,20 +39,24 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbPID = new System.Windows.Forms.TextBox();
+            this.lbProcesses = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bRefresh = new System.Windows.Forms.Button();
             this.lbInjected = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.selectedBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.bShowProcInfo = new System.Windows.Forms.Button();
             this.tbDllResult = new System.Windows.Forms.TextBox();
             this.bBrowseDll = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.gbSelect.SuspendLayout();
             this.selectedBox.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -104,6 +104,70 @@
             this.gbSelect.TabStop = false;
             this.gbSelect.Text = "Process Select";
             // 
+            // bSelectExe
+            // 
+            this.bSelectExe.Location = new System.Drawing.Point(160, 171);
+            this.bSelectExe.Name = "bSelectExe";
+            this.bSelectExe.Size = new System.Drawing.Size(201, 23);
+            this.bSelectExe.TabIndex = 9;
+            this.bSelectExe.Text = "Select";
+            this.bSelectExe.UseVisualStyleBackColor = true;
+            this.bSelectExe.Click += new System.EventHandler(this.bSelectExe_Click);
+            // 
+            // bSelectPID
+            // 
+            this.bSelectPID.Location = new System.Drawing.Point(25, 171);
+            this.bSelectPID.Name = "bSelectPID";
+            this.bSelectPID.Size = new System.Drawing.Size(92, 23);
+            this.bSelectPID.TabIndex = 8;
+            this.bSelectPID.Text = "Select";
+            this.bSelectPID.UseVisualStyleBackColor = true;
+            this.bSelectPID.Click += new System.EventHandler(this.bSelectPID_Click);
+            // 
+            // bBrowseExe
+            // 
+            this.bBrowseExe.Location = new System.Drawing.Point(160, 61);
+            this.bBrowseExe.Name = "bBrowseExe";
+            this.bBrowseExe.Size = new System.Drawing.Size(201, 26);
+            this.bBrowseExe.TabIndex = 6;
+            this.bBrowseExe.Text = "Browse for executable";
+            this.bBrowseExe.UseVisualStyleBackColor = true;
+            this.bBrowseExe.Click += new System.EventHandler(this.bBrowseExe_Click);
+            // 
+            // tbExe
+            // 
+            this.tbExe.Location = new System.Drawing.Point(160, 89);
+            this.tbExe.Name = "tbExe";
+            this.tbExe.Size = new System.Drawing.Size(201, 24);
+            this.tbExe.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(123, 89);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(31, 18);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "OR";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 65);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(119, 18);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Enter process ID";
+            // 
+            // tbPID
+            // 
+            this.tbPID.Location = new System.Drawing.Point(25, 89);
+            this.tbPID.Name = "tbPID";
+            this.tbPID.Size = new System.Drawing.Size(92, 24);
+            this.tbPID.TabIndex = 2;
+            // 
             // lbProcesses
             // 
             this.lbProcesses.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -141,69 +205,6 @@
             this.bRefresh.Text = "Refresh Process List";
             this.bRefresh.UseVisualStyleBackColor = true;
             this.bRefresh.Click += new System.EventHandler(this.bRefresh_Click);
-            // 
-            // bSelectExe
-            // 
-            this.bSelectExe.Location = new System.Drawing.Point(160, 171);
-            this.bSelectExe.Name = "bSelectExe";
-            this.bSelectExe.Size = new System.Drawing.Size(201, 23);
-            this.bSelectExe.TabIndex = 9;
-            this.bSelectExe.Text = "Select";
-            this.bSelectExe.UseVisualStyleBackColor = true;
-            this.bSelectExe.Click += new System.EventHandler(this.bSelectExe_Click);
-            // 
-            // bSelectPID
-            // 
-            this.bSelectPID.Location = new System.Drawing.Point(25, 171);
-            this.bSelectPID.Name = "bSelectPID";
-            this.bSelectPID.Size = new System.Drawing.Size(92, 23);
-            this.bSelectPID.TabIndex = 8;
-            this.bSelectPID.Text = "Select";
-            this.bSelectPID.UseVisualStyleBackColor = true;
-            this.bSelectPID.Click += new System.EventHandler(this.bSelectPID_Click);
-            // 
-            // bBrowseExe
-            // 
-            this.bBrowseExe.Location = new System.Drawing.Point(160, 61);
-            this.bBrowseExe.Name = "bBrowseExe";
-            this.bBrowseExe.Size = new System.Drawing.Size(201, 26);
-            this.bBrowseExe.TabIndex = 6;
-            this.bBrowseExe.Text = "Browse for executable";
-            this.bBrowseExe.UseVisualStyleBackColor = true;
-            // 
-            // tbExe
-            // 
-            this.tbExe.Location = new System.Drawing.Point(160, 89);
-            this.tbExe.Name = "tbExe";
-            this.tbExe.Size = new System.Drawing.Size(201, 24);
-            this.tbExe.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(123, 89);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(31, 18);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "OR";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 65);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 18);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Enter process ID";
-            // 
-            // tbPID
-            // 
-            this.tbPID.Location = new System.Drawing.Point(25, 89);
-            this.tbPID.Name = "tbPID";
-            this.tbPID.Size = new System.Drawing.Size(92, 24);
-            this.tbPID.TabIndex = 2;
             // 
             // lbInjected
             // 
@@ -243,6 +244,15 @@
             this.selectedBox.Text = "Currently selected:";
             this.selectedBox.Enter += new System.EventHandler(this.selectedBox_Enter);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(208, 64);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 18);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Path:";
+            // 
             // bShowProcInfo
             // 
             this.bShowProcInfo.Location = new System.Drawing.Point(211, 171);
@@ -251,6 +261,7 @@
             this.bShowProcInfo.TabIndex = 10;
             this.bShowProcInfo.Text = "Show proc info";
             this.bShowProcInfo.UseVisualStyleBackColor = true;
+            this.bShowProcInfo.Click += new System.EventHandler(this.bShowProcInfo_Click);
             // 
             // tbDllResult
             // 
@@ -293,6 +304,13 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -312,26 +330,10 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(987, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(844, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "Created by aevv";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(208, 64);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 18);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Path:";
             // 
             // Form1
             // 

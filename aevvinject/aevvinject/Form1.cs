@@ -8,11 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Management;
+using System.Threading;
 
 namespace aevvinject
 {
     public partial class Form1 : Form
     {
+        string activeExe = "";
+        bool openNew = false;
         ProcessWrapper activeProcess = null;
         Injector i = new Injector();
         Dictionary<string, ProcessWrapper> lProcs = new Dictionary<string, ProcessWrapper>();
@@ -68,7 +71,6 @@ namespace aevvinject
                 {
                     try
                     {
-
                         ico = Icon.ExtractAssociatedIcon(p.MainModule.FileName);
                         Bitmap bm = new Bitmap(ico.Width, ico.Height);
                         using (Graphics g = Graphics.FromImage(bm))
@@ -76,17 +78,12 @@ namespace aevvinject
                             g.DrawIcon(ico, 0, 0);
                         }
                         il.Images.Add(p.MainModule.FileName, bm);
-
-
                     }
                     catch
                     {
-                        //  il.Images.Add(p.Id.ToString(),Image.FromHbitmap(aevvinject.Properties.Resources.refresh.GetHbitmap()));
-                    };
-                }
-                
-                
-                
+                          
+                    }
+                }     
                 lProcs.Add(p.Id.ToString(),w);
             }
             lbProcesses.SmallImageList = il;
@@ -107,12 +104,21 @@ namespace aevvinject
         }
         private void updateSelected()
         {
-            selectedBox.Text = "Currently selected: " + activeProcess.Process.ProcessName;
-            lbInjected.Items.Clear();
-            foreach (DLLInformation d in activeProcess.InjectedList)
+            if (!openNew)
             {
-                if (d.IsInjected)
-                    lbInjected.Items.Add(d);
+                selectedBox.Text = "Currently selected: " + activeProcess.Process.ProcessName;
+                lbInjected.Items.Clear();
+                foreach (DLLInformation d in activeProcess.InjectedList)
+                {
+                    if (d.IsInjected)
+                        lbInjected.Items.Add(d);
+                }
+            }
+            else
+            {
+                string[] split = tbExe.Text.Split('\\');
+                selectedBox.Text = "Will launch process from: " + split[split.Length - 1];
+                lbInjected.Items.Clear();
             }
         }
 
@@ -127,13 +133,27 @@ namespace aevvinject
 
         private void bInject_Click(object sender, EventArgs e)
         {
-            activeProcess.InjectedList.Add(i.inject(activeProcess.Process.Id, tbDllResult.Text));
-            updateSelected();
+            if (!openNew)
+            {
+                activeProcess.InjectedList.Add(i.inject(activeProcess.Process.Id, tbDllResult.Text));
+                updateSelected();
+            }
+            else
+            {
+                DLLInformation dll = i.inject(activeExe, tbDllResult.Text);
+                activeProcess = new ProcessWrapper(Process.GetProcessById(dll.ProcID));
+                activeProcess.InjectedList.Add(dll);
+                openNew = false;
+                updateSelected();
+            }
         }
 
         private void bUnject_Click(object sender, EventArgs e)
         {
-            i.unject((DLLInformation)lbInjected.SelectedItem);
+            if (lbInjected.SelectedItem != null || !activeProcess.Process.HasExited)
+            {
+                i.unject((DLLInformation)lbInjected.SelectedItem);
+            }
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -141,6 +161,7 @@ namespace aevvinject
             if (lbProcesses.SelectedItems.Count > 0)
             {
                 activeProcess = lProcs[lbProcesses.SelectedItems[0].SubItems[1].Text];
+                openNew = false;
                 updateSelected();
             }
         }
@@ -152,17 +173,29 @@ namespace aevvinject
 
         private void selectedBox_Enter(object sender, EventArgs e)
         {
-
+            
         }
 
         private void bSelectExe_Click(object sender, EventArgs e)
         {
-
+            openNew = true;
+            activeExe = tbExe.Text;
+            updateSelected();
         }
 
         private void bSelectPID_Click(object sender, EventArgs e)
         {
+            int pid;
+            if (int.TryParse(tbPID.Text, out pid))
+            {
+                activeProcess = new ProcessWrapper(Process.GetProcessById(pid));
+                openNew = false;
+                updateSelected();
+            }
+            else
+            {
 
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -173,6 +206,20 @@ namespace aevvinject
         private void label5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void bBrowseExe_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog o = new OpenFileDialog();
+            if (o.ShowDialog() == DialogResult.OK)
+            {
+                tbExe.Text = o.FileName;
+            }
+        }
+
+        private void bShowProcInfo_Click(object sender, EventArgs e)
+        {
+            new ProcessInformation(activeProcess).ShowDialog();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace aevvinject
 {
-    class ProcessWrapper
+    public class ProcessWrapper
     {
         private Process process;
 
