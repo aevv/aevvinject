@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.bInject = new System.Windows.Forms.Button();
             this.bUnject = new System.Windows.Forms.Button();
             this.gbSelect = new System.Windows.Forms.GroupBox();
@@ -67,9 +68,9 @@
             // 
             this.bInject.BackColor = System.Drawing.SystemColors.Control;
             this.bInject.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bInject.Location = new System.Drawing.Point(211, 91);
+            this.bInject.Location = new System.Drawing.Point(256, 91);
             this.bInject.Name = "bInject";
-            this.bInject.Size = new System.Drawing.Size(140, 34);
+            this.bInject.Size = new System.Drawing.Size(181, 34);
             this.bInject.TabIndex = 0;
             this.bInject.Text = "inject";
             this.bInject.UseVisualStyleBackColor = true;
@@ -79,9 +80,9 @@
             // 
             this.bUnject.BackColor = System.Drawing.Color.SteelBlue;
             this.bUnject.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bUnject.Location = new System.Drawing.Point(211, 131);
+            this.bUnject.Location = new System.Drawing.Point(256, 131);
             this.bUnject.Name = "bUnject";
-            this.bUnject.Size = new System.Drawing.Size(140, 34);
+            this.bUnject.Size = new System.Drawing.Size(181, 34);
             this.bUnject.TabIndex = 1;
             this.bUnject.Text = "eject";
             this.bUnject.UseVisualStyleBackColor = true;
@@ -97,9 +98,9 @@
             this.gbSelect.Controls.Add(this.label2);
             this.gbSelect.Controls.Add(this.tbPID);
             this.gbSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbSelect.Location = new System.Drawing.Point(430, 21);
+            this.gbSelect.Location = new System.Drawing.Point(378, 21);
             this.gbSelect.Name = "gbSelect";
-            this.gbSelect.Size = new System.Drawing.Size(400, 214);
+            this.gbSelect.Size = new System.Drawing.Size(452, 214);
             this.gbSelect.TabIndex = 2;
             this.gbSelect.TabStop = false;
             this.gbSelect.Text = "Process Select";
@@ -178,7 +179,7 @@
             this.lbProcesses.MultiSelect = false;
             this.lbProcesses.Name = "lbProcesses";
             this.lbProcesses.ShowGroups = false;
-            this.lbProcesses.Size = new System.Drawing.Size(398, 438);
+            this.lbProcesses.Size = new System.Drawing.Size(360, 438);
             this.lbProcesses.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lbProcesses.TabIndex = 11;
             this.lbProcesses.UseCompatibleStateImageBehavior = false;
@@ -188,7 +189,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Process Name";
-            this.columnHeader1.Width = 307;
+            this.columnHeader1.Width = 296;
             // 
             // columnHeader2
             // 
@@ -200,7 +201,7 @@
             this.bRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bRefresh.Location = new System.Drawing.Point(12, 477);
             this.bRefresh.Name = "bRefresh";
-            this.bRefresh.Size = new System.Drawing.Size(398, 30);
+            this.bRefresh.Size = new System.Drawing.Size(360, 30);
             this.bRefresh.TabIndex = 10;
             this.bRefresh.Text = "Refresh Process List";
             this.bRefresh.UseVisualStyleBackColor = true;
@@ -212,7 +213,7 @@
             this.lbInjected.ItemHeight = 18;
             this.lbInjected.Location = new System.Drawing.Point(10, 61);
             this.lbInjected.Name = "lbInjected";
-            this.lbInjected.Size = new System.Drawing.Size(185, 202);
+            this.lbInjected.Size = new System.Drawing.Size(192, 202);
             this.lbInjected.TabIndex = 3;
             // 
             // label5
@@ -223,7 +224,6 @@
             this.label5.Size = new System.Drawing.Size(214, 36);
             this.label5.TabIndex = 6;
             this.label5.Text = "DLLs already injected in this:";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // selectedBox
             // 
@@ -236,13 +236,12 @@
             this.selectedBox.Controls.Add(this.bUnject);
             this.selectedBox.Controls.Add(this.bInject);
             this.selectedBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selectedBox.Location = new System.Drawing.Point(430, 241);
+            this.selectedBox.Location = new System.Drawing.Point(387, 241);
             this.selectedBox.Name = "selectedBox";
-            this.selectedBox.Size = new System.Drawing.Size(400, 274);
+            this.selectedBox.Size = new System.Drawing.Size(443, 274);
             this.selectedBox.TabIndex = 7;
             this.selectedBox.TabStop = false;
             this.selectedBox.Text = "Currently selected:";
-            this.selectedBox.Enter += new System.EventHandler(this.selectedBox_Enter);
             // 
             // label1
             // 
@@ -255,9 +254,9 @@
             // 
             // bShowProcInfo
             // 
-            this.bShowProcInfo.Location = new System.Drawing.Point(211, 171);
+            this.bShowProcInfo.Location = new System.Drawing.Point(256, 171);
             this.bShowProcInfo.Name = "bShowProcInfo";
-            this.bShowProcInfo.Size = new System.Drawing.Size(140, 34);
+            this.bShowProcInfo.Size = new System.Drawing.Size(181, 34);
             this.bShowProcInfo.TabIndex = 10;
             this.bShowProcInfo.Text = "Show proc info";
             this.bShowProcInfo.UseVisualStyleBackColor = true;
@@ -267,14 +266,14 @@
             // 
             this.tbDllResult.Location = new System.Drawing.Point(256, 61);
             this.tbDllResult.Name = "tbDllResult";
-            this.tbDllResult.Size = new System.Drawing.Size(95, 24);
+            this.tbDllResult.Size = new System.Drawing.Size(181, 24);
             this.tbDllResult.TabIndex = 8;
             // 
             // bBrowseDll
             // 
-            this.bBrowseDll.Location = new System.Drawing.Point(211, 23);
+            this.bBrowseDll.Location = new System.Drawing.Point(256, 26);
             this.bBrowseDll.Name = "bBrowseDll";
-            this.bBrowseDll.Size = new System.Drawing.Size(140, 32);
+            this.bBrowseDll.Size = new System.Drawing.Size(181, 32);
             this.bBrowseDll.TabIndex = 7;
             this.bBrowseDll.Text = "Browse for DLL";
             this.bBrowseDll.UseVisualStyleBackColor = true;
@@ -316,6 +315,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -346,10 +346,10 @@
             this.Controls.Add(this.selectedBox);
             this.Controls.Add(this.gbSelect);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "aevvinject";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.gbSelect.ResumeLayout(false);
             this.gbSelect.PerformLayout();
             this.selectedBox.ResumeLayout(false);

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Management;
 using System.Threading;
+using System.IO;
 
 namespace aevvinject
 {
@@ -23,17 +24,6 @@ namespace aevvinject
         {
             InitializeComponent();
             refreshProcessList();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bSelectProc_Click(object sender, EventArgs e)
-        {
-
-          
         }
 
         private void bRefresh_Click(object sender, EventArgs e)
@@ -106,7 +96,7 @@ namespace aevvinject
         {
             if (!openNew)
             {
-                selectedBox.Text = "Currently selected: " + activeProcess.Process.ProcessName;
+                selectedBox.Text = "Currently selected: " + activeProcess.Process.ProcessName + " (" + activeProcess.Process.Id + ")";
                 lbInjected.Items.Clear();
                 foreach (DLLInformation d in activeProcess.InjectedList)
                 {
@@ -125,6 +115,9 @@ namespace aevvinject
         private void bBrowseDll_Click(object sender, EventArgs e)
         {
             OpenFileDialog o = new OpenFileDialog();
+            o.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            o.DefaultExt = "dll";
+            o.Filter = "DLL|*.dll|Executable|*.exe";
             if (o.ShowDialog() == DialogResult.OK)
             {
                 tbDllResult.Text = o.FileName;
@@ -135,24 +128,52 @@ namespace aevvinject
         {
             if (!openNew)
             {
-                activeProcess.InjectedList.Add(i.inject(activeProcess.Process.Id, tbDllResult.Text));
-                updateSelected();
+                if (activeProcess != null)
+                {
+                    activeProcess.InjectedList.Add(i.inject(activeProcess.Process.Id, tbDllResult.Text));
+                    updateSelected();
+                }
+                else
+                {
+                    msg("No process selected");
+                }
             }
             else
             {
-                DLLInformation dll = i.inject(activeExe, tbDllResult.Text);
-                activeProcess = new ProcessWrapper(Process.GetProcessById(dll.ProcID));
-                activeProcess.InjectedList.Add(dll);
-                openNew = false;
-                updateSelected();
+                if (File.Exists(activeExe))
+                {
+                    if (File.Exists(tbDllResult.Text))
+                    {
+                        DLLInformation dll = i.inject(activeExe, tbDllResult.Text);
+                        activeProcess = new ProcessWrapper(Process.GetProcessById(dll.ProcID));
+                        activeProcess.InjectedList.Add(dll);
+                        openNew = false;
+                        updateSelected();
+                    }
+                    else
+                    {
+                        msg("No DLL found to inject");
+                    }
+                }
+                else
+                {
+                    msg("No executable to launch");
+                }
             }
         }
 
         private void bUnject_Click(object sender, EventArgs e)
         {
-            if (lbInjected.SelectedItem != null || !activeProcess.Process.HasExited)
+            if (activeProcess != null)
             {
-                i.unject((DLLInformation)lbInjected.SelectedItem);
+                if (lbInjected.SelectedItem != null && !activeProcess.Process.HasExited)
+                {
+                    i.unject((DLLInformation)lbInjected.SelectedItem);
+                }
+            }
+            else
+            {
+                msg("No process selected");
             }
         }
 
@@ -171,16 +192,18 @@ namespace aevvinject
             refreshProcessList();
         }
 
-        private void selectedBox_Enter(object sender, EventArgs e)
-        {
-            
-        }
-
         private void bSelectExe_Click(object sender, EventArgs e)
         {
-            openNew = true;
-            activeExe = tbExe.Text;
-            updateSelected();
+            if (!tbExe.Text.Equals(""))
+            {
+                openNew = true;
+                activeExe = tbExe.Text;
+                updateSelected();
+            }
+            else
+            {
+                msg("No executable selected");
+            }
         }
 
         private void bSelectPID_Click(object sender, EventArgs e)
@@ -188,13 +211,20 @@ namespace aevvinject
             int pid;
             if (int.TryParse(tbPID.Text, out pid))
             {
-                activeProcess = new ProcessWrapper(Process.GetProcessById(pid));
-                openNew = false;
-                updateSelected();
+                try
+                {
+                    activeProcess = new ProcessWrapper(Process.GetProcessById(pid));
+                    openNew = false;
+                    updateSelected();
+                }
+                catch
+                {
+                    msg("No process found with this PID");
+                }
             }
             else
             {
-
+                msg("PID has to be a number");
             }
         }
 
@@ -203,14 +233,12 @@ namespace aevvinject
             Environment.Exit(0);
         }
 
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void bBrowseExe_Click(object sender, EventArgs e)
         {
             OpenFileDialog o = new OpenFileDialog();
+            o.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            o.DefaultExt = "exe";
+            o.Filter = "Executable|*.exe";
             if (o.ShowDialog() == DialogResult.OK)
             {
                 tbExe.Text = o.FileName;
@@ -219,7 +247,31 @@ namespace aevvinject
 
         private void bShowProcInfo_Click(object sender, EventArgs e)
         {
-            new ProcessInformation(activeProcess).ShowDialog();
+            if (activeProcess != null)
+            {
+                if (!activeProcess.Process.HasExited)
+                {
+                    new ProcessInformation(activeProcess).ShowDialog();
+                }
+                else
+                {
+                    msg("Process has exited, can't display process information");
+                    activeProcess = null;
+                }
+            }
+            else
+            {
+                msg("No process selected");
+            }
+        }
+        private void msg(string text)
+        {
+            MessageBox.Show(text, "aevvinject", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/aevv/aevvinject");
         }
     }
 }

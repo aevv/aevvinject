@@ -138,32 +138,39 @@ namespace aevvinject
         }
         public int unject(DLLInformation d)
         {
-            if (!d.IsInjected)
+            try
             {
-                return -2;
+                if (!d.IsInjected)
+                {
+                    return -2;
+                }
+                IntPtr hProcess = OpenProcess((int)(0x000F0000L | 0x00100000L | 0xFFF), false, d.ProcID);
+                if (hProcess == null || hProcess.ToInt32() == -1)
+                {
+                    return 1;
+                }
+                uint x = 0;
+                IntPtr loc = new IntPtr(GetProcAddress(GetModuleHandle("KERNEL32.dll"), "FreeLibrary").ToUInt32());
+                IntPtr hThread = CreateRemoteThread(hProcess, new IntPtr(0), 0, loc, new IntPtr(d.DllHandle), 0, out x);
+                if (hThread == null || hThread.ToInt32() == -1)
+                {
+                    return 2;
+                }
+                WaitForSingleObject(hThread, uint.MaxValue);
+                uint exitCode;
+                if (!GetExitCodeThread(hThread, out exitCode))
+                {
+                    return 3;
+                }
+                CloseHandle(hThread);
+                CloseHandle(hProcess);
+                d.IsInjected = false;
+                return 0;
             }
-            IntPtr hProcess = OpenProcess((int)(0x000F0000L | 0x00100000L | 0xFFF), false, d.ProcID);
-            if (hProcess == null || hProcess.ToInt32() == -1)
+            catch
             {
-                return 1;
+                return -1;
             }
-            uint x = 0;
-            IntPtr loc = new IntPtr(GetProcAddress(GetModuleHandle("KERNEL32.dll"), "FreeLibrary").ToUInt32());
-            IntPtr hThread = CreateRemoteThread(hProcess, new IntPtr(0), 0, loc, new IntPtr(d.DllHandle), 0, out x);
-            if (hThread == null || hThread.ToInt32() == -1)
-            {
-                return 2;
-            }
-            WaitForSingleObject(hThread, uint.MaxValue);
-            uint exitCode;
-            if (!GetExitCodeThread(hThread, out exitCode))
-            {
-                return 3;
-            }
-            CloseHandle(hThread);
-            CloseHandle(hProcess);
-            d.IsInjected = false;
-            return 0;
         }
         private int commonInject(IntPtr hProcess, string dllPath, ref DLLInformation d)
         {
