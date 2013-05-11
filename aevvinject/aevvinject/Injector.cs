@@ -174,42 +174,49 @@ namespace aevvinject
         }
         private int commonInject(IntPtr hProcess, string dllPath, ref DLLInformation d)
         {
-            if (d == null)
-                d = new DLLInformation();
-            d.DllPath = dllPath;
-            if (hProcess == null || hProcess.ToInt32() == -1)
+            try
             {
-                return 1;
+                if (d == null)
+                    d = new DLLInformation();
+                d.DllPath = dllPath;
+                if (hProcess == null || hProcess.ToInt32() == -1)
+                {
+                    return 1;
+                }
+                IntPtr memory = VirtualAllocEx(hProcess, new IntPtr(0), (uint)dllPath.Length, AllocationType.Commit, MemoryProtection.ReadWrite);
+                if (memory == null || memory.ToInt32() == 0)
+                {
+                    return 2;
+                }
+                UIntPtr p;
+                byte[] data = Encoding.ASCII.GetBytes(dllPath);
+                if (!WriteProcessMemory(hProcess, memory, data, (uint)dllPath.Length, out p))
+                {
+                    return 3;
+                }
+                uint x = 0;
+                IntPtr loc = new IntPtr(GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "LoadLibraryA").ToUInt32());
+                IntPtr hThread = CreateRemoteThread(hProcess, new IntPtr(0), 0, loc, memory, 0, out x);
+                if (hThread == null || hThread.ToInt32() == -1)
+                {
+                    return 4;
+                }
+                WaitForSingleObject(hThread, uint.MaxValue);
+                uint exitCode;
+                if (!GetExitCodeThread(hThread, out exitCode))
+                {
+                    return 5;
+                }
+                d.DllHandle = exitCode;
+                CloseHandle(hThread);
+                VirtualFreeEx(hProcess, memory, dllPath.Length + 1, FreeType.Release);
+                d.IsInjected = true;
+                return 0;
             }
-            IntPtr memory = VirtualAllocEx(hProcess, new IntPtr(0), (uint)dllPath.Length, AllocationType.Commit, MemoryProtection.ReadWrite);
-            if (memory == null || memory.ToInt32() == 0)
+            catch
             {
-                return 2;
+                return -1;
             }
-            UIntPtr p;
-            byte[] data = Encoding.ASCII.GetBytes(dllPath);
-            if (!WriteProcessMemory(hProcess, memory, data, (uint)dllPath.Length, out p))
-            {
-                return 3;
-            }
-            uint x = 0;
-            IntPtr loc = new IntPtr(GetProcAddress(GetModuleHandle("KERNEL32.DLL"), "LoadLibraryA").ToUInt32());
-            IntPtr hThread = CreateRemoteThread(hProcess, new IntPtr(0), 0, loc, memory, 0, out x);
-            if (hThread == null || hThread.ToInt32() == -1)
-            {
-                return 4;
-            }
-            WaitForSingleObject(hThread, uint.MaxValue);
-            uint exitCode;
-            if (!GetExitCodeThread(hThread, out exitCode))
-            {
-                return 5;
-            }
-            d.DllHandle = exitCode;
-            CloseHandle(hThread);
-            VirtualFreeEx(hProcess, memory, dllPath.Length + 1, FreeType.Release);
-            d.IsInjected = true;
-            return 0;
         }
     }
 }

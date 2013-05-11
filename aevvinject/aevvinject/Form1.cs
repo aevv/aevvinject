@@ -51,8 +51,8 @@ namespace aevvinject
         {
             lbProcesses.Items.Clear();
             Process[] procs = Process.GetProcesses();
-            lProcs.Clear();            
-            
+            lProcs.Clear();
+
             foreach (Process p in procs)
             {
                 ProcessWrapper w = new ProcessWrapper(p);
@@ -71,13 +71,13 @@ namespace aevvinject
                     }
                     catch
                     {
-                          
+
                     }
-                }     
-                lProcs.Add(p.Id.ToString(),w);
+                }
+                lProcs.Add(p.Id.ToString(), w);
             }
             lbProcesses.SmallImageList = il;
-            
+
             foreach (var q in lProcs)
             {
                 ProcessWrapper w = q.Value;
@@ -89,7 +89,7 @@ namespace aevvinject
                 {
                     lbProcesses.Items.Add(new ListViewItem(new string[] { w.Process.ProcessName, w.Process.Id.ToString() }));
                 }
-                
+
             }
         }
         private void updateSelected()
@@ -130,8 +130,16 @@ namespace aevvinject
             {
                 if (activeProcess != null)
                 {
-                    activeProcess.InjectedList.Add(i.inject(activeProcess.Process.Id, tbDllResult.Text));
-                    updateSelected();
+                    var res = i.inject(activeProcess.Process.Id, tbDllResult.Text);
+                    if (res.ErrorCode == 0)
+                    {
+                        activeProcess.InjectedList.Add(res);
+                        updateSelected();
+                    }
+                    else
+                    {
+                        msg("Injection failed");
+                    }
                 }
                 else
                 {
@@ -144,11 +152,25 @@ namespace aevvinject
                 {
                     if (File.Exists(tbDllResult.Text))
                     {
-                        DLLInformation dll = i.inject(activeExe, tbDllResult.Text);
-                        activeProcess = new ProcessWrapper(Process.GetProcessById(dll.ProcID));
-                        activeProcess.InjectedList.Add(dll);
-                        openNew = false;
-                        updateSelected();
+                        try
+                        {
+                            DLLInformation dll = i.inject(activeExe, tbDllResult.Text);
+                            if (dll.ErrorCode == 0)
+                            {
+                                activeProcess = new ProcessWrapper(Process.GetProcessById(dll.ProcID));
+                                activeProcess.InjectedList.Add(dll);
+                                openNew = false;
+                                updateSelected();
+                            }
+                            else
+                            {
+                                msg("Injection failed");
+                            }
+                        }
+                        catch
+                        {
+                            msg("Injection failed");
+                        }
                     }
                     else
                     {

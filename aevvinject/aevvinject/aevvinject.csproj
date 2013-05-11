@@ -36,6 +36,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>aevvhead.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -104,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="aevvhead.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
